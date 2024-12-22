@@ -1,6 +1,6 @@
 object Form2: TForm2
-  Left = 1300
-  Top = 209
+  Left = 1080
+  Top = 123
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Track races'

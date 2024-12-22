@@ -37,9 +37,9 @@ type
 
 var
   Form2: TForm2 ;
-  cara,konec:integer;
+  TloutkaCary,konec:integer;
   speed: real;
-  name1,name2: string;
+  player1,player2: string;
 implementation
 
 uses Unit1;
@@ -48,7 +48,7 @@ uses Unit1;
 
 procedure TForm2.Button1Click(Sender: TObject);
 begin
-cara:=trackbar1.position;
+TloutkaCary:=trackbar1.position;
 speed:=TrackBar2.position;
 form2.Hide;
 form1.show;  
@@ -62,7 +62,7 @@ end;
 
 procedure TForm2.TrackBar1Change(Sender: TObject);
 begin
-cara:=trackbar1.position;
+TloutkaCary:=trackbar1.position;
 edit1.Text:= INTTOSTR(trackbar1.position);
 end;
 
@@ -74,18 +74,18 @@ end;
 
 procedure TForm2.Edit3Change(Sender: TObject);
 begin
- name1:= edit3.text;
+ player1:= edit3.text;
 end;
 
 procedure TForm2.Edit4Change(Sender: TObject);
 begin
-name2:= edit4.text;
+player2:= edit4.text;
 end;
 
 procedure TForm2.FormCreate(Sender: TObject);
 begin
-name1:='player1';
-name2:='player2';
+player1:='player1';
+player2:='player2';
 konec:=15;
 end;
 
