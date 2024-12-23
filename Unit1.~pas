@@ -17,7 +17,6 @@ type
     Label2: TLabel;
     Button1: TButton;
     Button2: TButton;
-    Timer3: TTimer;
     Label3: TLabel;
     Button3: TButton;
     CheckBox1: TCheckBox;
@@ -33,14 +32,14 @@ type
       Shift: TShiftState);
     procedure FormKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
-    procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure kontroluj (Sender: TObject);
-    procedure Timer3Timer(Sender: TObject);
     procedure Timer2Timer(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   private
     procedure UpdatePlayer(var X, Y: Integer; var angle: Real; LControl, RControl: Boolean; color: TColor);
+    procedure InicializujHru;
   public
     X1, X2, Y1, Y2, mess : Integer;
     angle1,angle2: Real;
@@ -125,127 +124,89 @@ begin
   if Key = 39 then R2 := False;
 end;
 
-
-//nove kolo
-procedure TForm1.Button1Click(Sender: TObject);
+//////////////////////
+// Inicializace Hry //
+procedure TForm1.InicializujHru;
 begin
  button1.Enabled:=false;
- button3.visible:=false;
- button3.Top:=30 + random(500);
- button3.left:=30 + random(630);
  timer2.Enabled:=true;
- timer3.Enabled:=true;
- label3.Visible:=true;
- label3.Top:=trunc(image1.Height/2) - 50;
- label3.left:=trunc(image1.Width/2) - 30;
- label3.Font.size:=80;
- label3.Caption:=INTTOSTR(3);
- label4.Caption:=INTTOSTR(5);
  checkbox1.State:=cbunchecked;
  checkbox2.State:=cbunchecked;
+ label4.Caption:=INTTOSTR(5);
+ 
+ label3.Visible:=true;
+ label3.Caption:=INTTOSTR(3);
+ label3.Top:=trunc(image1.Height/2)-80;
+ label3.left:=trunc(image1.Width/2)-30;
+ label3.Font.size:=80;
+
+ //vykreslení rámeèku
+ Image1.canvas.pen.color:=clgreen;
+ Image1.canvas.pen.width:=15;
+ image1.Canvas.Rectangle(0,0,image1.Width,image1.Height);
+ 
+ //reset ovládání
+  Image1.Canvas.Pen.Width:= TloutkaCary;
+  L1:= False;
+  R1:= False;
+  L2:= False;
+  R2:= False; 
+end;
+
+procedure TForm1.Button1Click(Sender: TObject);
+begin
+ InicializujHru;
 end;
 
 procedure TForm1.FormShow(Sender: TObject);
 begin
- randomize;
  edit1.Text:= '0';
  edit2.Text:= '0';
- label5.Caption:=player1;
- label6.Caption:=player2;
-
+ label5.Caption:=hrac1;
+ label6.Caption:=hrac2;
  label8.Caption:= 'Limit vyhraných kol = ' + INTTOSTR(PocetKol);
 
- button3.Top:=30 + random(470);
- button3.left:=30 + random(630);
- Image1.canvas.pen.color:=clgreen;
- Image1.canvas.pen.width:=15;
- image1.Canvas.Rectangle(0,0,image1.Width,image1.Height);
-
- timer2.Enabled:=true;
- timer3.Enabled:=true;
- label3.Top:=trunc(image1.Height/2) - 50;
- label3.left:=trunc(image1.Width/2) - 30;
- label3.Font.size:=80;
- label3.Caption:=INTTOSTR(3);
- label3.Caption:= INTTOSTR(STRTOINT(label3.Caption) -1);
-  if label3.Caption=INTTOSTR(0) THEN
-  begin
-  X1:= Round(Image1.Width * 1/4);
-  X2:= Round(Image1.Width * 3/4);
-
-  Y1:= Image1.Height div 2;
-  Y2:= Image1.Height div 2;
-
-  angle1:= random (700)/100;
-  angle2:= random (700)/100;
-
-  L1:= False;
-  R1:= False;
-
-  L2:= False;
-  R2:= False;
-  Image1.Canvas.Pen.Width:= TloutkaCary;
-  timer1.enabled:= true;
-  button1.enabled:=false;
-  button2.enabled:=false;
-end;
-end;
-
- // prekopat na game inicializaci
-procedure TForm1.Timer3Timer(Sender: TObject);
-begin 
-  label3.Caption:= INTTOSTR(STRTOINT(label3.Caption) -1);
-  if label3.Caption=INTTOSTR(0) THEN
-  begin
-  timer3.Enabled:=false;
-  label3.visible:=false;
- Image1.canvas.pen.color:=clgreen;
- Image1.canvas.pen.width:=15;
- image1.Canvas.Rectangle(0,0,image1.Width,image1.Height);
-
-  X1:= Round(Image1.Width * 1/4);
-  X2:= Round(Image1.Width * 3/4);
-
-  Y1:= Image1.Height div 2;
-  Y2:= Image1.Height div 2;
-
-  angle1:= random (700)/100;
-  angle2:= random (700)/100;
-
-  L1:= False;
-  R1:= False;
-
-  L2:= False;
-  R2:= False;
-  Image1.Canvas.Pen.Width:= TloutkaCary;
-  timer1.enabled:= true;
-  button1.enabled:=false;
-  button2.enabled:=false;
-  end;
+ InicializujHru;  
 end;
 
 procedure TForm1.Timer2Timer(Sender: TObject);
 begin
-label4.Caption:= INTTOSTR(STRTOINT(label4.Caption) - 1);
-IF label4.Caption =INTTOSTR(0) THEN
-begin
-label4.Caption:=INTTOSTR(5);
-button3.Top:=30 + random(470);
-button3.left:=30 + random(660);
-button3.Visible:=true;
+  //náhodný vektor hráèù pøi startu
+  label3.Caption:= INTTOSTR(STRTOINT(label3.Caption) -1);
+  if label3.Caption=INTTOSTR(0) THEN
+  begin
+  label3.visible:=false;
+  X1:= Round(Image1.Width * 1/4);
+  X2:= Round(Image1.Width * 3/4);
 
+  Y1:= Image1.Height div 2;
+  Y2:= Image1.Height div 2;
+
+  randomize;
+  angle1:= random (7);
+  angle2:= random (7);
+
+  timer1.enabled:= true;
+  button1.enabled:=false;
+  button2.enabled:=false;
+  end;
+
+  //spawn tlaèítka bonusu
+  label4.Caption:= INTTOSTR(STRTOINT(label4.Caption) - 1);
+  IF label4.Caption =INTTOSTR(0) THEN
+  begin
+  label4.Caption:=INTTOSTR(5);
+  button3.Top:=30 + random(490);
+  button3.left:=30 + random(690);
+  button3.Visible:=true;
+  end;
 end;
-
-end;
-
 
 procedure TForm1.Button2Click(Sender: TObject);
 begin
 form1.hide;
 form2.Show;
 end;
-
-
 
 /////////////////////
 // Kontrola kolizí //
@@ -424,6 +385,8 @@ CASE image1.Canvas.Pixels[Round(X1+(TloutkaCary*3/4)*cos(angle1)),Round(Y1+(Tlou
   end;
 end;
 
-
-
 end.
+
+
+
+

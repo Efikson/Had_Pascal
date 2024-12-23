@@ -92,7 +92,8 @@ object Form1: TForm1
       Width = 105
       Height = 25
       Alignment = taCenter
-      Caption = 'Player 1'
+      AutoSize = False
+      Caption = 'Hr'#225#269' 1'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -20
@@ -106,7 +107,8 @@ object Form1: TForm1
       Width = 105
       Height = 25
       Alignment = taCenter
-      Caption = 'Player 2'
+      AutoSize = False
+      Caption = 'Hr'#225#269' 2'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -20
@@ -130,8 +132,8 @@ object Form1: TForm1
     object Label8: TLabel
       Left = 8
       Top = 376
-      Width = 113
-      Height = 17
+      Width = 112
+      Height = 13
       Caption = 'Po'#269'et vyhran'#253'ch kol =  '
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -236,22 +238,16 @@ object Form1: TForm1
     Font.Color = clWindowText
     Font.Height = -16
     Font.Name = 'MS Sans Serif'
-    Font.Style = []
+    Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 1
     Visible = False
   end
   object Timer1: TTimer
     Enabled = False
-    Interval = 40
+    Interval = 50
     OnTimer = Timer1Timer
     Left = 8
-    Top = 8
-  end
-  object Timer3: TTimer
-    Enabled = False
-    OnTimer = Timer3Timer
-    Left = 72
     Top = 8
   end
   object Timer2: TTimer
