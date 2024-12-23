@@ -40,7 +40,7 @@ type
 var
   Form2: TForm2 ;
   TloutkaCary, RychlostCary, PocetKol:integer;
-  player1,player2: string;
+  hrac1,hrac2: string;
   
 implementation
 
@@ -53,8 +53,8 @@ begin
 TloutkaCary:=trackbar1.position;
 RychlostCary:=TrackBar2.position;
 PocetKol:=TrackBar3.position;
-player1:='player1';
-player2:='player2';
+hrac1:=edit3.text;
+hrac2:=edit4.text; 
 
 form2.Hide;
 form1.show;  
@@ -86,12 +86,12 @@ end;
 
 procedure TForm2.Edit3Change(Sender: TObject);
 begin
-player1:= edit3.text;
+hrac1:= edit3.text;
 end;
 
 procedure TForm2.Edit4Change(Sender: TObject);
 begin
-player2:= edit4.text;
+hrac2:= edit4.text;
 end;
 
 end.

@@ -1,6 +1,6 @@
 object Form2: TForm2
-  Left = 1347
-  Top = 180
+  Left = 1465
+  Top = 135
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Track races'
@@ -141,10 +141,10 @@ object Form2: TForm2
     Left = 160
     Top = 32
     Width = 25
-    Height = 20
+    Height = 21
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -13
+    Font.Height = -11
     Font.Name = 'MS Sans Serif'
     Font.Style = []
     ParentFont = False
@@ -167,7 +167,7 @@ object Form2: TForm2
     Left = 160
     Top = 96
     Width = 25
-    Height = 20
+    Height = 21
     ReadOnly = True
     TabOrder = 5
     Text = '5'
@@ -184,7 +184,7 @@ object Form2: TForm2
     Font.Style = []
     ParentFont = False
     TabOrder = 6
-    Text = 'Player 1'
+    Text = 'Hr'#225#269' 1'
     OnChange = Edit3Change
   end
   object Edit4: TEdit
@@ -199,14 +199,14 @@ object Form2: TForm2
     Font.Style = []
     ParentFont = False
     TabOrder = 7
-    Text = 'Player 2'
+    Text = 'Hr'#225#269' 2'
     OnChange = Edit4Change
   end
   object Edit5: TEdit
     Left = 160
     Top = 160
     Width = 25
-    Height = 20
+    Height = 21
     ReadOnly = True
     TabOrder = 8
     Text = '10'
