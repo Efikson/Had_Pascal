@@ -40,15 +40,15 @@ type
   private
     procedure UpdatePlayer(var X, Y: Integer; var angle: Real; LControl, RControl: Boolean; color: TColor);
     procedure InicializujHru;
+    procedure ResetHry(hrac: Integer);
   public
-    X1, X2, Y1, Y2, mess : Integer;
-    angle1,angle2: Real;
-    L1, R1, L2, R2,start: Boolean;
+    X1, X2, Y1, Y2 : Integer;
+    angle1, angle2: Real;
+    L1, R1, L2, R2 : Boolean;
   end;
 
 var
   Form1: TForm1;
-  bod,bod1,bod2 : tpoint;
 implementation
 
 uses Unit2;
@@ -73,13 +73,8 @@ end;
 
 procedure TForm1.Timer1Timer(Sender: TObject);
 begin
-  // Hráè 1 (èervený)
   UpdatePlayer(X1, Y1, angle1, L1, R1, clRed);
-
-  // Hráè 2 (modrý)
   UpdatePlayer(X2, Y2, angle2, L2, R2, clBlue);
-
-  // Zavolání kontroly
   kontroluj(Sender);
 end;
 
@@ -96,6 +91,13 @@ begin
       X1 := Round(X1 + BlinkRange * Cos(angle1));
       Y1 := Round(Y1 + BlinkRange * Sin(angle1));
       CheckBox1.State := cbUnchecked;
+
+      // Kontrola skoku mimo herní oblast
+      if not PtInRect(image1.BoundsRect, Point(X1, Y1)) then
+      begin
+      ResetHry(1);
+      Showmessage(label5.caption + ' chtìl zbabìle utéct');      
+      end;
     end;
   end;
 
@@ -106,6 +108,13 @@ begin
       X2 := Round(X2 + BlinkRange * Cos(angle2));
       Y2 := Round(Y2 + BlinkRange * Sin(angle2));
       CheckBox2.State := cbUnchecked;
+
+      // Kontrola skoku mimo herní oblast   
+      if not PtInRect(image1.BoundsRect, Point(X1, Y1)) then
+      begin
+      ResetHry(2);
+      Showmessage(label6.caption + ' chtìl zbabìle utéct');      
+      end;
     end;
   end;
 
@@ -158,6 +167,7 @@ begin
  InicializujHru;
 end;
 
+// Spuštìní prvního kola
 procedure TForm1.FormShow(Sender: TObject);
 begin
  edit1.Text:= '0';
@@ -208,154 +218,65 @@ form1.hide;
 form2.Show;
 end;
 
+// Zastavení a reset hry po kolizi
+procedure TForm1.ResetHry(hrac: Integer);
+begin
+  case hrac of
+  1: edit2.Text := INTTOSTR(STRTOINT(edit2.Text) + 1);
+  2: edit1.Text := INTTOSTR(STRTOINT(edit1.Text) + 1);
+  end;
+timer1.Enabled := false;
+timer2.Enabled := false;
+label3.Visible := true;
+label3.Top := trunc(image1.Height / 2) - 20;
+label3.Left := trunc(image1.Width / 2) - 160;
+label3.Font.Size := 20;
+label3.Caption := 'Pro nové kolo stiskni ENTER';
+button1.Enabled := true;
+button2.Enabled := true;  
+end;   
+
 /////////////////////
 // Kontrola kolizí //
 procedure TForm1.kontroluj(Sender: TObject);
+var
+mess : integer;
+bod, bod1: TPoint;
 begin
+//kolize pro hráèe 1
 bod1.X:=Round(X1+(TloutkaCary*3/4)*cos(angle1));
-bod1.y:=Round(Y1+(TloutkaCary*3/4)*sin(angle1));
-IF Ptinrect(image1.BoundsRect,bod1) THEN
-else
-begin
-timer1.Enabled:=false;
-  timer2.Enabled:=false;
-  label3.Visible:=true;
-  label3.Top:=trunc(image1.Height/2) - 20;
-  label3.left:=trunc(image1.Width/2) - 160;
-  label3.Font.Size:=20;
-  label3.caption:='Pro nove kolo stiskni ENTER';
-  Showmessage(label5.caption + ' chtìl zbabìle utéct');
-  edit2.Text:= INTTOSTR(STRTOINT(edit2.Text) + 1);
-  button1.enabled:=true;
-  button2.enabled:=true;
-end;
+bod1.Y:=Round(Y1+(TloutkaCary*3/4)*sin(angle1));
 
-bod2.X:=Round(X2+(TloutkaCary*3/4)*cos(angle2));
-bod2.y:=Round(Y2+(TloutkaCary*3/4)*sin(angle2));
-IF Ptinrect(image1.BoundsRect,bod2) THEN
-else
-begin
-  timer1.Enabled:=false;
-  timer2.Enabled:=false;
-  label3.Visible:=true;
-  label3.Top:=trunc(image1.Height/2) - 20;
-  label3.left:=trunc(image1.Width/2) - 160;
-  label3.Font.Size:=20;
-  label3.caption:='Pro nove kolo stiskni ENTER';
-  Showmessage(label6.caption + ' chtìl zbabìle utéct');
-  edit1.Text:= INTTOSTR(STRTOINT(edit1.Text) + 1);
-  button1.enabled:=true;
-  button2.enabled:=true;
-end;
+case image1.Canvas.Pixels[bod1.X, bod1.Y] of
+  clRed: begin
+    ResetHry(1);
+    mess := random(2);
+    case mess of
+      0: Showmessage(label5.caption + ' ochutnal sám sebe');
+      1: Showmessage(label5.caption + ' narazil do svoji dráhy');
+    end;
+  end;
+  clBlue: begin
+    ResetHry(1);
+    mess := random(2);
+    case mess of
+      0: Showmessage(label5.caption + ' se nechal napálit');
+      1: Showmessage(label5.caption + ' narazil do modré dráhy');
+    end;
+
+  end;
+  ClGreen: begin
+    ResetHry(1);
+    mess := random(2);
+    case mess of
+      0: Showmessage(label5.caption + ' chtìl vyjet do windowsù');
+      1: Showmessage(label5.caption + ' narazil do zelené dráhy');
+    end;
+  end;
+end;  
 
 
-CASE image1.Canvas.Pixels[Round(X1+(TloutkaCary*3/4)*cos(angle1)),Round(Y1+(TloutkaCary*3/4)*sin(angle1))] OF
-  255: begin
-  timer1.Enabled:=false;
-  timer2.Enabled:=false;
-  label3.Visible:=true;
-  label3.Top:=trunc(image1.Height/2) - 20;
-  label3.left:=trunc(image1.Width/2) - 160;
-  label3.Font.Size:=20;
-  label3.caption:='Pro nove kolo stiskni ENTER';
-  mess:= random(2);
-  case mess of
-  0: Showmessage(label5.caption + ' ochutnal sám sebe');
-  1: Showmessage(label5.caption + ' narazil do svoji dráhy');
-  end;
-  edit2.Text:= INTTOSTR(STRTOINT(edit2.Text) + 1);
-  button1.enabled:=true;
-  button2.enabled:=true;
-        end;
-  16711680: begin
-  timer1.Enabled:=false;
-  timer2.Enabled:=false;
-  label3.Top:=trunc(image1.Height/2) - 20;
-  label3.left:=trunc(image1.Width/2) - 160;
-  label3.Visible:=true;
-  label3.Font.Size:=20;
-  label3.caption:='Pro nove kolo stiskni ENTER';
-  mess:= random(2);
-  case mess of
-  0: Showmessage(label5.caption + ' se nechal napálit');
-  1: Showmessage(label5.caption + ' narazil do modré dráhy');
-  end;
-  edit2.Text:= INTTOSTR(STRTOINT(edit2.Text) + 1);
-  button1.enabled:=true;
-  button2.enabled:=true;
-         end;
-  32768: begin
-  timer1.Enabled:=false;
-  timer2.Enabled:=false;
-  label3.Top:=trunc(image1.Height/2) - 20;
-  label3.left:=trunc(image1.Width/2) - 160;
-  label3.Visible:=true;
-  label3.Font.Size:=20;
-  label3.caption:='Pro nove kolo stiskni ENTER';
-  mess:= random(2);
-  case mess of
-  0: Showmessage(label5.caption + ' chtìl vyjet do windowsù');
-  1: Showmessage(label5.caption + ' narazil do zelené dráhy');
-  end;
-  edit2.Text:= INTTOSTR(STRTOINT(edit2.Text) + 1);
-  button1.enabled:=true;
-  button2.enabled:=true;
-         end;
-   end;
-  CASE image1.Canvas.Pixels[Round(X2+(TloutkaCary*3/4)*cos(angle2)),Round(Y2+(TloutkaCary*3/4)*sin(angle2))] OF
-  16711680: begin
-  timer1.Enabled:=false;
-  timer2.Enabled:=false;
-  label3.Top:=trunc(image1.Height/2) - 20;
-  label3.left:=trunc(image1.Width/2) - 160;
-  label3.Visible:=true;
-  label3.Font.Size:=20;
-  label3.caption:='Pro nove kolo stiskni ENTER';
-  mess:= random(2);
-  case mess of
-  0: Showmessage(label6.caption + ' ochutnal sám sebe');
-  1: Showmessage(label6.caption + ' narazil do svoji dráhy');
-  end;
-  edit1.Text:= INTTOSTR(STRTOINT(edit1.Text) + 1);
-  button1.enabled:=true;
-  button2.enabled:=true;
-        end;
-  255: begin
-  timer1.Enabled:=false;
-  timer2.Enabled:=false;
-  label3.Top:=trunc(image1.Height/2) - 20;
-  label3.left:=trunc(image1.Width/2) - 160;
-  label3.Visible:=true;
-  label3.Font.Size:=20;
-  label3.caption:='Pro nove kolo stiskni ENTER';
-  mess:= random(2);
-  case mess of
-  0: Showmessage(label6.caption + ' se nechal napálit');
-  1: Showmessage(label6.caption + ' narazil do èervené dráhy');
-  end;
-  edit1.Text:= INTTOSTR(STRTOINT(edit1.Text) + 1);
-  button1.enabled:=true;
-  button2.enabled:=true;
-         end;
-  32768: begin
-  timer1.Enabled:=false;
-  timer2.Enabled:=false;
-  label3.Top:=trunc(image1.Height/2) - 20;
-  label3.left:=trunc(image1.Width/2) - 160;
-  label3.Visible:=true;
-  label3.Font.Size:=20;
-  label3.caption:='Pro nove kolo stiskni ENTER';
-  mess:= random(2);
-  case mess of
-  0: Showmessage(label6.caption + ' chtìl vyjet do windowsù');
-  1: Showmessage(label6.caption + ' narazil do zelené dráhy');
-  end;
-  edit1.Text:= INTTOSTR(STRTOINT(edit1.Text) + 1);
-  button1.enabled:=true;
-  button2.enabled:=true;
-         end;
-   end;
-
+  //kolize s tlaèítkem bonusu
   bod.X:=Round(X1+(TloutkaCary*3/4)*cos(angle1));
   bod.y:=Round(Y1+(TloutkaCary*3/4)*sin(angle1));
   IF Ptinrect(button3.BoundsRect,bod) THEN
@@ -370,7 +291,7 @@ CASE image1.Canvas.Pixels[Round(X1+(TloutkaCary*3/4)*cos(angle1)),Round(Y1+(Tlou
   begin
   button3.visible:=false;
   checkbox2.State:=cbchecked;
-  end;
+  end;  
 
   IF edit1.Text=INTTOSTR(PocetKol) THEN
   begin     
@@ -383,6 +304,7 @@ CASE image1.Canvas.Pixels[Round(X1+(TloutkaCary*3/4)*cos(angle1)),Round(Y1+(Tlou
   showmessage(label6.caption + ' zvítìzil');
   button1.enabled:=false;
   end;
+  
 end;
 
 end.
