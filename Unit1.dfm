@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 369
-  Top = 186
+  Left = 189
+  Top = 125
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Track races'
@@ -74,14 +74,14 @@ object Form1: TForm1
       ParentFont = False
     end
     object Label4: TLabel
-      Left = 56
-      Top = 488
-      Width = 18
-      Height = 37
+      Left = 48
+      Top = 464
+      Width = 37
+      Height = 75
       Caption = '5'
-      Font.Charset = DEFAULT_CHARSET
+      Font.Charset = BALTIC_CHARSET
       Font.Color = clWindowText
-      Font.Height = -35
+      Font.Height = -67
       Font.Name = 'MS Sans Serif'
       Font.Style = []
       ParentFont = False
@@ -116,7 +116,7 @@ object Form1: TForm1
     end
     object Label7: TLabel
       Left = 16
-      Top = 464
+      Top = 448
       Width = 99
       Height = 20
       Caption = #268'as do blinku'
@@ -130,9 +130,9 @@ object Form1: TForm1
     object Label8: TLabel
       Left = 8
       Top = 376
-      Width = 105
-      Height = 13
-      Caption = 'Limit vyhran'#253'ch kol =  '
+      Width = 113
+      Height = 17
+      Caption = 'Po'#269'et vyhran'#253'ch kol =  '
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
