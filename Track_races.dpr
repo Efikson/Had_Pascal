@@ -1,4 +1,4 @@
-program Project1;
+program Track_races;
 
 uses
   Forms,
