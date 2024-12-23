@@ -34,17 +34,19 @@ type
       Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure Button2Click(Sender: TObject);
-    procedure kontroluj (Sender: TObject);
     procedure Timer2Timer(Sender: TObject);
     procedure Button1Click(Sender: TObject);
   private
-    procedure UpdatePlayer(var X, Y: Integer; var angle: Real; LControl, RControl: Boolean; color: TColor);
+    procedure UpdatePlayer(var X, Y: integer; var angle: Real; LControl, RControl: Boolean; color: TColor);
     procedure InicializujHru;
-    procedure ResetHry(hrac: Integer);
+    procedure ZastavitHru;
+    procedure Kontroluj (player: Integer);
+    Procedure BodyVitezstvi(player: Integer);
+    procedure ResetHry(player: Integer);
   public
-    X1, X2, Y1, Y2 : Integer;
-    angle1, angle2: Real;
-    L1, R1, L2, R2 : Boolean;
+    X1, X2, Y1, Y2 : integer; //Pozice hráèù
+    angle1, angle2: Real; //ovládání hráèù
+    L1, R1, L2, R2, vitez : Boolean; //ovládání hráèù
   end;
 
 var
@@ -57,7 +59,7 @@ uses Unit2;
 
 ////////////////////////
 // Vykreslování hráèù //
-procedure TForm1.UpdatePlayer(var X, Y: Integer; var angle: Real; LControl, RControl: Boolean; color: TColor);
+procedure TForm1.UpdatePlayer(var X, Y: integer; var angle: Real; LControl, RControl: Boolean; color: TColor);
 begin
   Image1.Canvas.MoveTo(X, Y);
   X := Round(X + RychlostCary * Cos(angle));
@@ -75,7 +77,8 @@ procedure TForm1.Timer1Timer(Sender: TObject);
 begin
   UpdatePlayer(X1, Y1, angle1, L1, R1, clRed);
   UpdatePlayer(X2, Y2, angle2, L2, R2, clBlue);
-  kontroluj(Sender);
+  Kontroluj(1);
+  Kontroluj(2);
 end;
 
 ////////////////////
@@ -95,6 +98,8 @@ begin
       // Kontrola skoku mimo herní oblast
       if not PtInRect(image1.BoundsRect, Point(X1, Y1)) then
       begin
+      BodyVitezstvi(1);
+      if vitez then Exit;
       ResetHry(1);
       Showmessage(label5.caption + ' chtìl zbabìle utéct');      
       end;
@@ -112,6 +117,8 @@ begin
       // Kontrola skoku mimo herní oblast   
       if not PtInRect(image1.BoundsRect, Point(X1, Y1)) then
       begin
+      BodyVitezstvi(2);
+      if vitez then Exit;
       ResetHry(2);
       Showmessage(label6.caption + ' chtìl zbabìle utéct');      
       end;
@@ -162,9 +169,12 @@ begin
   R2:= False; 
 end;
 
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.ZastavitHru;
 begin
- InicializujHru;
+  button1.Enabled := False;
+  button2.Enabled := True;
+  timer1.Enabled := False;
+  timer2.Enabled := False;
 end;
 
 // Spuštìní prvního kola
@@ -175,8 +185,21 @@ begin
  label5.Caption:=hrac1;
  label6.Caption:=hrac2;
  label8.Caption:= 'Limit vyhraných kol = ' + INTTOSTR(PocetKol);
+ vitez := false;
 
  InicializujHru;  
+end;
+
+// Zastavení a pøípadný reset hry po kolizi
+procedure TForm1.ResetHry(player: Integer);
+begin
+  ZastavitHru;
+  button1.Enabled := True;
+  label3.Visible := True;
+  label3.Top := Trunc(image1.Height / 2) - 20;
+  label3.Left := Trunc(image1.Width / 2) - 160;
+  label3.Font.Size := 20;
+  label3.Caption := 'Pro nové kolo stiskni ENTER';
 end;
 
 procedure TForm1.Timer2Timer(Sender: TObject);
@@ -188,12 +211,11 @@ begin
   label3.visible:=false;
   X1:= Round(Image1.Width * 1/4);
   X2:= Round(Image1.Width * 3/4);
-
   Y1:= Image1.Height div 2;
   Y2:= Image1.Height div 2;
 
   randomize;
-  angle1:= random (7);
+  angle1:= random (7); //úhly v radiánech
   angle2:= random (7);
 
   timer1.enabled:= true;
@@ -212,99 +234,112 @@ begin
   end;
 end;
 
+procedure TForm1.Button1Click(Sender: TObject);
+begin
+ InicializujHru;
+end;
+
 procedure TForm1.Button2Click(Sender: TObject);
 begin
 form1.hide;
 form2.Show;
 end;
 
-// Zastavení a reset hry po kolizi
-procedure TForm1.ResetHry(hrac: Integer);
+// Pøiètení bodù a kontrola vítìzství
+Procedure Tform1.BodyVitezstvi(player: Integer);
 begin
-  case hrac of
-  1: edit2.Text := INTTOSTR(STRTOINT(edit2.Text) + 1);
-  2: edit1.Text := INTTOSTR(STRTOINT(edit1.Text) + 1);
+  // Pøiètení bodu hráèi
+  case player of
+    1: edit2.Text := INTTOSTR(STRTOINT(edit2.Text) + 1);
+    2: edit1.Text := INTTOSTR(STRTOINT(edit1.Text) + 1);
   end;
-timer1.Enabled := false;
-timer2.Enabled := false;
-label3.Visible := true;
-label3.Top := trunc(image1.Height / 2) - 20;
-label3.Left := trunc(image1.Width / 2) - 160;
-label3.Font.Size := 20;
-label3.Caption := 'Pro nové kolo stiskni ENTER';
-button1.Enabled := true;
-button2.Enabled := true;  
-end;   
+
+  // Kontrola vítìzství
+  if (StrToInt(edit1.Text) = PocetKol) then
+  begin
+    vitez := true;
+    ZastavitHru;
+    ShowMessage(label5.Caption + ' zvítìzil!');
+  end
+  else if (StrToInt(edit2.Text) = PocetKol) then
+  begin
+    vitez := true;
+    ZastavitHru;
+    ShowMessage(label6.Caption + ' zvítìzil!');
+  end;
+end;
 
 /////////////////////
 // Kontrola kolizí //
-procedure TForm1.kontroluj(Sender: TObject);
+procedure TForm1.Kontroluj(player: Integer);
 var
-mess : integer;
-bod, bod1: TPoint;
-begin
-//kolize pro hráèe 1
-bod1.X:=Round(X1+(TloutkaCary*3/4)*cos(angle1));
-bod1.Y:=Round(Y1+(TloutkaCary*3/4)*sin(angle1));
-
-case image1.Canvas.Pixels[bod1.X, bod1.Y] of
-  clRed: begin
-    ResetHry(1);
-    mess := random(2);
-    case mess of
-      0: Showmessage(label5.caption + ' ochutnal sám sebe');
-      1: Showmessage(label5.caption + ' narazil do svoji dráhy');
+  mess: Integer;
+  bod1: TPoint;
+  playerX, playerY, playerAngle: real;
+  playerName: string;
+  playerCheckBox: TCheckBox;
+begin  
+  case player of
+    1: begin
+      playerX := X1;
+      playerY := Y1;
+      playerAngle := angle1;
+      playerName := hrac1;
+      playerCheckBox := CheckBox1;
+    end;
+    2: begin
+      playerX := X2;
+      playerY := Y2;
+      playerAngle := angle2;
+      playerName := hrac2;
+      playerCheckBox := CheckBox2;
     end;
   end;
-  clBlue: begin
-    ResetHry(1);
-    mess := random(2);
-    case mess of
-      0: Showmessage(label5.caption + ' se nechal napálit');
-      1: Showmessage(label5.caption + ' narazil do modré dráhy');
+
+  // Kolize pro hráèe
+  bod1.X := Round(playerX + (TloutkaCary * 3 / 4) * Cos(playerAngle));
+  bod1.Y := Round(playerY + (TloutkaCary * 3 / 4) * Sin(playerAngle));
+
+  // Kontrola kolize
+  case image1.Canvas.Pixels[bod1.X, bod1.Y] of
+    clRed: begin
+      BodyVitezstvi(player);
+      if vitez then Exit;
+      ResetHry(player);
+      mess := Random(2);
+      case mess of
+        0: ShowMessage(playerName + ' ochutnal sám sebe');
+        1: ShowMessage(playerName + ' narazil do èervené dráhy');
+      end; 
     end;
-
-  end;
-  ClGreen: begin
-    ResetHry(1);
-    mess := random(2);
-    case mess of
-      0: Showmessage(label5.caption + ' chtìl vyjet do windowsù');
-      1: Showmessage(label5.caption + ' narazil do zelené dráhy');
+    clBlue: begin
+      BodyVitezstvi(player);
+      if vitez then Exit;
+      ResetHry(player);
+      mess := Random(2);
+      case mess of
+        0: ShowMessage(playerName + ' se nechal napálit');
+        1: ShowMessage(playerName + ' narazil do modré dráhy'); 
+      end;
     end;
-  end;
-end;  
+    clGreen: begin
+      BodyVitezstvi(player);
+      if vitez then Exit;
+      ResetHry(player);
+      mess := Random(2);
+      case mess of
+        0: ShowMessage(playerName + ' chtìl vyjet do windowsù');
+        1: ShowMessage(playerName + ' narazil do zelené dráhy');
+      end;
+    end;
+  end; 
 
-
-  //kolize s tlaèítkem bonusu
-  bod.X:=Round(X1+(TloutkaCary*3/4)*cos(angle1));
-  bod.y:=Round(Y1+(TloutkaCary*3/4)*sin(angle1));
-  IF Ptinrect(button3.BoundsRect,bod) THEN
+  // Kontrola kolize s tlaèítkem bonusu
+  if PtInRect(Button3.BoundsRect, bod1) then
   begin
-  button3.visible:=false;
-  checkbox1.State:=cbchecked;
-  end;
-
-  bod.X:=Round(X2+(TloutkaCary*3/4)*cos(angle2));
-  bod.y:=Round(Y2+(TloutkaCary*3/4)*sin(angle2));
-  IF Ptinrect(button3.BoundsRect,bod) THEN
-  begin
-  button3.visible:=false;
-  checkbox2.State:=cbchecked;
-  end;  
-
-  IF edit1.Text=INTTOSTR(PocetKol) THEN
-  begin     
-  showmessage(label5.caption + ' zvítìzil');
-  button1.enabled:=false;
-  end;
-
-  IF edit2.Text=INTTOSTR(PocetKol) THEN
-  begin
-  showmessage(label6.caption + ' zvítìzil');
-  button1.enabled:=false;
-  end;
-  
+    Button3.Visible := False;
+    playerCheckBox.State := cbChecked;
+  end;             
 end;
 
 end.

@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 189
-  Top = 125
+  Left = 224
+  Top = 127
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Track races'
@@ -39,6 +39,7 @@ object Form1: TForm1
     Font.Style = []
     ParentColor = False
     ParentFont = False
+    Transparent = True
   end
   object Panel1: TPanel
     Left = 750
@@ -48,29 +49,33 @@ object Form1: TForm1
     Align = alRight
     TabOrder = 0
     object Label1: TLabel
-      Left = 24
+      Left = 8
       Top = 16
-      Width = 74
-      Height = 25
+      Width = 113
+      Height = 29
+      Alignment = taCenter
+      AutoSize = False
       Caption = #268'erven'#253
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clRed
-      Font.Height = -20
+      Font.Height = -24
       Font.Name = 'MS Sans Serif'
-      Font.Style = []
+      Font.Style = [fsBold]
       ParentFont = False
     end
     object Label2: TLabel
-      Left = 32
-      Top = 160
-      Width = 55
-      Height = 25
+      Left = 8
+      Top = 152
+      Width = 105
+      Height = 29
+      Alignment = taCenter
+      AutoSize = False
       Caption = 'Modr'#253
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlue
-      Font.Height = -20
+      Font.Height = -24
       Font.Name = 'MS Sans Serif'
-      Font.Style = []
+      Font.Style = [fsBold]
       ParentFont = False
     end
     object Label4: TLabel
@@ -88,8 +93,8 @@ object Form1: TForm1
     end
     object Label5: TLabel
       Left = 8
-      Top = 40
-      Width = 105
+      Top = 48
+      Width = 113
       Height = 25
       Alignment = taCenter
       AutoSize = False
@@ -104,7 +109,7 @@ object Form1: TForm1
     object Label6: TLabel
       Left = 8
       Top = 184
-      Width = 105
+      Width = 113
       Height = 25
       Alignment = taCenter
       AutoSize = False
@@ -117,11 +122,11 @@ object Form1: TForm1
       ParentFont = False
     end
     object Label7: TLabel
-      Left = 16
+      Left = 8
       Top = 448
-      Width = 99
+      Width = 110
       Height = 20
-      Caption = #268'as do blinku'
+      Caption = #268'as do bonusu'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -16
@@ -131,7 +136,7 @@ object Form1: TForm1
     end
     object Label8: TLabel
       Left = 8
-      Top = 376
+      Top = 384
       Width = 112
       Height = 13
       Caption = 'Po'#269'et vyhran'#253'ch kol =  '
@@ -144,7 +149,7 @@ object Form1: TForm1
     end
     object Edit1: TEdit
       Left = 48
-      Top = 64
+      Top = 72
       Width = 25
       Height = 21
       AutoSelect = False
@@ -164,16 +169,16 @@ object Form1: TForm1
       Text = '0'
     end
     object Button1: TButton
-      Left = 24
-      Top = 304
-      Width = 81
-      Height = 25
+      Left = 8
+      Top = 296
+      Width = 113
+      Height = 33
       Caption = 'Nov'#233' kolo'
       Default = True
       Enabled = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -13
+      Font.Height = -19
       Font.Name = 'MS Sans Serif'
       Font.Style = []
       ParentFont = False
@@ -182,14 +187,14 @@ object Form1: TForm1
     end
     object Button2: TButton
       Left = 8
-      Top = 336
+      Top = 344
       Width = 113
       Height = 25
       Caption = 'N'#225'vrat do menu'
       Enabled = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -13
+      Font.Height = -15
       Font.Name = 'MS Sans Serif'
       Font.Style = []
       ParentFont = False
@@ -198,10 +203,10 @@ object Form1: TForm1
     end
     object CheckBox1: TCheckBox
       Left = 32
-      Top = 88
+      Top = 96
       Width = 65
       Height = 17
-      Caption = 'blink'
+      Caption = 'skok'
       Enabled = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -216,7 +221,7 @@ object Form1: TForm1
       Top = 232
       Width = 65
       Height = 17
-      Caption = 'blink'
+      Caption = 'skok'
       Enabled = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
