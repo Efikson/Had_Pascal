@@ -21,14 +21,16 @@ type
     Edit4: TEdit;
     Edit5: TEdit;
     Label4: TLabel;
+    TrackBar3: TTrackBar;
+    Label5: TLabel;
+    Label6: TLabel;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure TrackBar1Change(Sender: TObject);
     procedure TrackBar2Change(Sender: TObject);
     procedure Edit3Change(Sender: TObject);
     procedure Edit4Change(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
-    procedure Edit5Change(Sender: TObject);
+    procedure TrackBar3Change(Sender: TObject);
   private
     { Private declarations }
   public
@@ -37,19 +39,23 @@ type
 
 var
   Form2: TForm2 ;
-  TloutkaCary,konec:integer;
-  speed: real;
+  TloutkaCary, RychlostCary, PocetKol:integer;
   player1,player2: string;
+  
 implementation
 
 uses Unit1;
 
 {$R *.dfm}
-
+// start a inicializace menu
 procedure TForm2.Button1Click(Sender: TObject);
 begin
 TloutkaCary:=trackbar1.position;
-speed:=TrackBar2.position;
+RychlostCary:=TrackBar2.position;
+PocetKol:=TrackBar3.position;
+player1:='player1';
+player2:='player2';
+
 form2.Hide;
 form1.show;  
 
@@ -68,30 +74,24 @@ end;
 
 procedure TForm2.TrackBar2Change(Sender: TObject);
 begin
-speed:=TrackBar2.position;
+RychlostCary:=TrackBar2.position;
 edit2.Text:= INTTOSTR(trackbar2.position);
+end;
+
+procedure TForm2.TrackBar3Change(Sender: TObject);
+begin
+PocetKol:=TrackBar3.position;
+edit5.Text:= INTTOSTR(trackbar3.position);
 end;
 
 procedure TForm2.Edit3Change(Sender: TObject);
 begin
- player1:= edit3.text;
+player1:= edit3.text;
 end;
 
 procedure TForm2.Edit4Change(Sender: TObject);
 begin
 player2:= edit4.text;
-end;
-
-procedure TForm2.FormCreate(Sender: TObject);
-begin
-player1:='player1';
-player2:='player2';
-konec:=15;
-end;
-
-procedure TForm2.Edit5Change(Sender: TObject);
-begin
-konec:= STRTOINT(edit5.text);
 end;
 
 end.

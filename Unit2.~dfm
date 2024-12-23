@@ -1,11 +1,11 @@
 object Form2: TForm2
-  Left = 1433
-  Top = 124
+  Left = 1345
+  Top = 161
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Track races'
-  ClientHeight = 201
-  ClientWidth = 451
+  ClientHeight = 213
+  ClientWidth = 433
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -13,7 +13,6 @@ object Form2: TForm2
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
-  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
@@ -30,11 +29,11 @@ object Form2: TForm2
     ParentFont = False
   end
   object Label2: TLabel
-    Left = 24
-    Top = 80
-    Width = 122
+    Left = 40
+    Top = 72
+    Width = 101
     Height = 20
-    Caption = 'Rychlost pohybu'
+    Caption = 'Rychlost '#269#225'ry'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -16
@@ -44,12 +43,12 @@ object Form2: TForm2
   end
   object Label3: TLabel
     Left = 0
-    Top = 177
-    Width = 451
+    Top = 189
+    Width = 433
     Height = 24
     Align = alBottom
     Alignment = taRightJustify
-    Caption = 'Created by Filip Efler   '
+    Caption = 'Autor - Filip Efler   '
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -20
@@ -58,11 +57,11 @@ object Form2: TForm2
     ParentFont = False
   end
   object Label4: TLabel
-    Left = 32
-    Top = 144
-    Width = 141
+    Left = 16
+    Top = 136
+    Width = 147
     Height = 20
-    Caption = 'Limit vyhran'#253'ch kol'
+    Caption = 'Po'#269'et vyhran'#253'ch kol'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -16
@@ -70,9 +69,35 @@ object Form2: TForm2
     Font.Style = []
     ParentFont = False
   end
+  object Label5: TLabel
+    Left = 328
+    Top = 32
+    Width = 64
+    Height = 25
+    Caption = 'Q | A D'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -20
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
+  object Label6: TLabel
+    Left = 328
+    Top = 96
+    Width = 55
+    Height = 25
+    Caption = '0 | < >'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -20
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentFont = False
+  end
   object Button1: TButton
-    Left = 336
-    Top = 24
+    Left = 200
+    Top = 144
     Width = 99
     Height = 41
     Caption = 'START'
@@ -86,8 +111,8 @@ object Form2: TForm2
     OnClick = Button1Click
   end
   object Button2: TButton
-    Left = 336
-    Top = 72
+    Left = 320
+    Top = 144
     Width = 99
     Height = 41
     Caption = 'KONEC'
@@ -104,7 +129,7 @@ object Form2: TForm2
     Left = 8
     Top = 32
     Width = 150
-    Height = 45
+    Height = 33
     Max = 20
     Min = 5
     PageSize = 1
@@ -116,21 +141,22 @@ object Form2: TForm2
     Left = 160
     Top = 32
     Width = 25
-    Height = 24
+    Height = 20
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
     Font.Name = 'MS Sans Serif'
     Font.Style = []
     ParentFont = False
+    ReadOnly = True
     TabOrder = 3
     Text = '5'
   end
   object TrackBar2: TTrackBar
     Left = 8
-    Top = 104
+    Top = 96
     Width = 150
-    Height = 45
+    Height = 33
     Min = 1
     PageSize = 1
     Position = 5
@@ -139,15 +165,16 @@ object Form2: TForm2
   end
   object Edit2: TEdit
     Left = 160
-    Top = 104
+    Top = 96
     Width = 25
-    Height = 21
+    Height = 20
+    ReadOnly = True
     TabOrder = 5
     Text = '5'
   end
   object Edit3: TEdit
     Left = 200
-    Top = 56
+    Top = 32
     Width = 121
     Height = 24
     Font.Charset = DEFAULT_CHARSET
@@ -162,7 +189,7 @@ object Form2: TForm2
   end
   object Edit4: TEdit
     Left = 200
-    Top = 88
+    Top = 96
     Width = 121
     Height = 24
     Font.Charset = DEFAULT_CHARSET
@@ -176,12 +203,23 @@ object Form2: TForm2
     OnChange = Edit4Change
   end
   object Edit5: TEdit
-    Left = 184
-    Top = 144
-    Width = 33
-    Height = 21
+    Left = 160
+    Top = 160
+    Width = 25
+    Height = 20
+    ReadOnly = True
     TabOrder = 8
-    Text = '15'
-    OnChange = Edit5Change
+    Text = '10'
+  end
+  object TrackBar3: TTrackBar
+    Left = 8
+    Top = 160
+    Width = 150
+    Height = 45
+    Max = 15
+    Min = 1
+    Position = 10
+    TabOrder = 9
+    OnChange = TrackBar3Change
   end
 end

@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 190
-  Top = 120
+  Left = 189
+  Top = 125
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Track races'
@@ -130,9 +130,9 @@ object Form1: TForm1
     object Label8: TLabel
       Left = 8
       Top = 376
-      Width = 105
-      Height = 13
-      Caption = 'Limit vyhran'#253'ch kol =  '
+      Width = 113
+      Height = 17
+      Caption = 'Po'#269'et vyhran'#253'ch kol =  '
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11

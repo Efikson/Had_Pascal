@@ -43,7 +43,7 @@ type
     procedure UpdatePlayer(var X, Y: Integer; var angle: Real; LControl, RControl: Boolean; color: TColor);
   public
     X1, X2, Y1, Y2, mess : Integer;
-    angle1,angle2, prom: Real;
+    angle1,angle2: Real;
     L1, R1, L2, R2,start: Boolean;
   end;
 
@@ -61,8 +61,8 @@ uses Unit2;
 procedure TForm1.UpdatePlayer(var X, Y: Integer; var angle: Real; LControl, RControl: Boolean; color: TColor);
 begin
   Image1.Canvas.MoveTo(X, Y);
-  X := Round(X + speed * Cos(angle));
-  Y := Round(Y + speed * Sin(angle));
+  X := Round(X + RychlostCary * Cos(angle));
+  Y := Round(Y + RychlostCary * Sin(angle));
   Image1.Canvas.Pen.Color := color;
   Image1.Canvas.LineTo(X, Y);
 
@@ -126,10 +126,9 @@ begin
 end;
 
 
-
+//nove kolo
 procedure TForm1.Button1Click(Sender: TObject);
 begin
- speed:=prom;
  button1.Enabled:=false;
  button3.visible:=false;
  button3.Top:=30 + random(500);
@@ -154,9 +153,8 @@ begin
  label5.Caption:=player1;
  label6.Caption:=player2;
 
- label8.Caption:= 'Limit vyhraných kol = ' + INTTOSTR(konec);   
+ label8.Caption:= 'Limit vyhraných kol = ' + INTTOSTR(PocetKol);
 
- prom:=speed;
  button3.Top:=30 + random(470);
  button3.left:=30 + random(630);
  Image1.canvas.pen.color:=clgreen;
@@ -193,12 +191,64 @@ begin
 end;
 end;
 
+ // prekopat na game inicializaci
+procedure TForm1.Timer3Timer(Sender: TObject);
+begin 
+  label3.Caption:= INTTOSTR(STRTOINT(label3.Caption) -1);
+  if label3.Caption=INTTOSTR(0) THEN
+  begin
+  timer3.Enabled:=false;
+  label3.visible:=false;
+ Image1.canvas.pen.color:=clgreen;
+ Image1.canvas.pen.width:=15;
+ image1.Canvas.Rectangle(0,0,image1.Width,image1.Height);
+
+  X1:= Round(Image1.Width * 1/4);
+  X2:= Round(Image1.Width * 3/4);
+
+  Y1:= Image1.Height div 2;
+  Y2:= Image1.Height div 2;
+
+  angle1:= random (700)/100;
+  angle2:= random (700)/100;
+
+  L1:= False;
+  R1:= False;
+
+  L2:= False;
+  R2:= False;
+  Image1.Canvas.Pen.Width:= TloutkaCary;
+  timer1.enabled:= true;
+  button1.enabled:=false;
+  button2.enabled:=false;
+  end;
+end;
+
+procedure TForm1.Timer2Timer(Sender: TObject);
+begin
+label4.Caption:= INTTOSTR(STRTOINT(label4.Caption) - 1);
+IF label4.Caption =INTTOSTR(0) THEN
+begin
+label4.Caption:=INTTOSTR(5);
+button3.Top:=30 + random(470);
+button3.left:=30 + random(660);
+button3.Visible:=true;
+
+end;
+
+end;
+
+
 procedure TForm1.Button2Click(Sender: TObject);
 begin
 form1.hide;
 form2.Show;
 end;
 
+
+
+/////////////////////
+// Kontrola kolizí //
 procedure TForm1.kontroluj(Sender: TObject);
 begin
 bod1.X:=Round(X1+(TloutkaCary*3/4)*cos(angle1));
@@ -361,64 +411,19 @@ CASE image1.Canvas.Pixels[Round(X1+(TloutkaCary*3/4)*cos(angle1)),Round(Y1+(Tlou
   checkbox2.State:=cbchecked;
   end;
 
-  IF edit1.Text=INTTOSTR(konec) THEN
+  IF edit1.Text=INTTOSTR(PocetKol) THEN
   begin     
   showmessage(label5.caption + ' zvítìzil');
   button1.enabled:=false;
   end;
 
-  IF edit2.Text=INTTOSTR(konec) THEN
+  IF edit2.Text=INTTOSTR(PocetKol) THEN
   begin
   showmessage(label6.caption + ' zvítìzil');
   button1.enabled:=false;
   end;
 end;
 
-// prekopat na game inicializaci
-procedure TForm1.Timer3Timer(Sender: TObject);
-begin 
-  label3.Caption:= INTTOSTR(STRTOINT(label3.Caption) -1);
-  if label3.Caption=INTTOSTR(0) THEN
-  begin
-  timer3.Enabled:=false;
-  label3.visible:=false;
- Image1.canvas.pen.color:=clgreen;
- Image1.canvas.pen.width:=15;
- image1.Canvas.Rectangle(0,0,image1.Width,image1.Height);
 
-  X1:= Round(Image1.Width * 1/4);
-  X2:= Round(Image1.Width * 3/4);
-
-  Y1:= Image1.Height div 2;
-  Y2:= Image1.Height div 2;
-
-  angle1:= random (700)/100;
-  angle2:= random (700)/100;
-
-  L1:= False;
-  R1:= False;
-
-  L2:= False;
-  R2:= False;
-  Image1.Canvas.Pen.Width:= TloutkaCary;
-  timer1.enabled:= true;
-  button1.enabled:=false;
-  button2.enabled:=false;
-  end;
-end;
-
-procedure TForm1.Timer2Timer(Sender: TObject);
-begin
-label4.Caption:= INTTOSTR(STRTOINT(label4.Caption) - 1);
-IF label4.Caption =INTTOSTR(0) THEN
-begin
-label4.Caption:=INTTOSTR(5);
-button3.Top:=30 + random(470);
-button3.left:=30 + random(660);
-button3.Visible:=true;
-
-end;
-
-end;
 
 end.
