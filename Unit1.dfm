@@ -1,11 +1,11 @@
 object Form1: TForm1
-  Left = 224
-  Top = 127
+  Left = 459
+  Top = 180
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Track races'
   ClientHeight = 550
-  ClientWidth = 877
+  ClientWidth = 884
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -13,6 +13,7 @@ object Form1: TForm1
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
+  OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   OnKeyUp = FormKeyUp
   OnShow = FormShow
@@ -44,36 +45,36 @@ object Form1: TForm1
   object Panel1: TPanel
     Left = 750
     Top = 0
-    Width = 127
+    Width = 134
     Height = 550
     Align = alRight
     TabOrder = 0
     object Label1: TLabel
-      Left = 8
+      Left = 0
       Top = 16
-      Width = 113
-      Height = 29
+      Width = 134
+      Height = 33
       Alignment = taCenter
       AutoSize = False
-      Caption = #268'erven'#253
-      Font.Charset = DEFAULT_CHARSET
+      Caption = 'Red'
+      Font.Charset = BALTIC_CHARSET
       Font.Color = clRed
-      Font.Height = -24
+      Font.Height = -27
       Font.Name = 'MS Sans Serif'
       Font.Style = [fsBold]
       ParentFont = False
     end
     object Label2: TLabel
-      Left = 8
+      Left = 0
       Top = 152
-      Width = 105
+      Width = 134
       Height = 29
       Alignment = taCenter
       AutoSize = False
-      Caption = 'Modr'#253
-      Font.Charset = DEFAULT_CHARSET
+      Caption = 'Blue'
+      Font.Charset = BALTIC_CHARSET
       Font.Color = clBlue
-      Font.Height = -24
+      Font.Height = -27
       Font.Name = 'MS Sans Serif'
       Font.Style = [fsBold]
       ParentFont = False
@@ -92,41 +93,41 @@ object Form1: TForm1
       ParentFont = False
     end
     object Label5: TLabel
-      Left = 8
+      Left = 0
       Top = 48
-      Width = 113
+      Width = 134
       Height = 25
       Alignment = taCenter
       AutoSize = False
-      Caption = 'Hr'#225#269' 1'
-      Font.Charset = DEFAULT_CHARSET
+      Caption = 'Player 1'
+      Font.Charset = BALTIC_CHARSET
       Font.Color = clWindowText
-      Font.Height = -20
+      Font.Height = -21
       Font.Name = 'MS Sans Serif'
       Font.Style = []
       ParentFont = False
     end
     object Label6: TLabel
-      Left = 8
+      Left = 0
       Top = 184
-      Width = 113
+      Width = 134
       Height = 25
       Alignment = taCenter
       AutoSize = False
-      Caption = 'Hr'#225#269' 2'
-      Font.Charset = DEFAULT_CHARSET
+      Caption = 'Player 2'
+      Font.Charset = BALTIC_CHARSET
       Font.Color = clWindowText
-      Font.Height = -20
+      Font.Height = -21
       Font.Name = 'MS Sans Serif'
       Font.Style = []
       ParentFont = False
     end
     object Label7: TLabel
-      Left = 8
+      Left = 16
       Top = 448
-      Width = 110
+      Width = 104
       Height = 20
-      Caption = #268'as do bonusu'
+      Caption = 'Time to bonus'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -16
@@ -135,20 +136,20 @@ object Form1: TForm1
       ParentFont = False
     end
     object Label8: TLabel
-      Left = 8
-      Top = 384
-      Width = 112
-      Height = 13
-      Caption = 'Po'#269'et vyhran'#253'ch kol =  '
-      Font.Charset = DEFAULT_CHARSET
+      Left = 22
+      Top = 392
+      Width = 99
+      Height = 23
+      Caption = 'Race to '
+      Font.Charset = BALTIC_CHARSET
       Font.Color = clWindowText
-      Font.Height = -11
+      Font.Height = -20
       Font.Name = 'MS Sans Serif'
       Font.Style = []
       ParentFont = False
     end
     object Edit1: TEdit
-      Left = 48
+      Left = 56
       Top = 72
       Width = 25
       Height = 21
@@ -159,7 +160,7 @@ object Form1: TForm1
       Text = '0'
     end
     object Edit2: TEdit
-      Left = 48
+      Left = 56
       Top = 208
       Width = 25
       Height = 21
@@ -169,16 +170,16 @@ object Form1: TForm1
       Text = '0'
     end
     object Button1: TButton
-      Left = 8
+      Left = 16
       Top = 296
-      Width = 113
+      Width = 105
       Height = 33
-      Caption = 'Nov'#233' kolo'
+      Caption = 'New round'
       Default = True
       Enabled = False
-      Font.Charset = DEFAULT_CHARSET
+      Font.Charset = BALTIC_CHARSET
       Font.Color = clWindowText
-      Font.Height = -19
+      Font.Height = -17
       Font.Name = 'MS Sans Serif'
       Font.Style = []
       ParentFont = False
@@ -186,13 +187,13 @@ object Form1: TForm1
       OnClick = Button1Click
     end
     object Button2: TButton
-      Left = 8
+      Left = 16
       Top = 344
-      Width = 113
+      Width = 105
       Height = 25
-      Caption = 'N'#225'vrat do menu'
+      Caption = 'Back to menu'
       Enabled = False
-      Font.Charset = DEFAULT_CHARSET
+      Font.Charset = BALTIC_CHARSET
       Font.Color = clWindowText
       Font.Height = -15
       Font.Name = 'MS Sans Serif'
@@ -202,28 +203,28 @@ object Form1: TForm1
       OnClick = Button2Click
     end
     object CheckBox1: TCheckBox
-      Left = 32
+      Left = 40
       Top = 96
       Width = 65
       Height = 17
-      Caption = 'skok'
+      Caption = 'jump'
       Enabled = False
-      Font.Charset = DEFAULT_CHARSET
+      Font.Charset = BALTIC_CHARSET
       Font.Color = clWindowText
-      Font.Height = -16
+      Font.Height = -17
       Font.Name = 'MS Sans Serif'
       Font.Style = []
       ParentFont = False
       TabOrder = 4
     end
     object CheckBox2: TCheckBox
-      Left = 32
+      Left = 40
       Top = 232
       Width = 65
       Height = 17
-      Caption = 'skok'
+      Caption = 'jump'
       Enabled = False
-      Font.Charset = DEFAULT_CHARSET
+      Font.Charset = BALTIC_CHARSET
       Font.Color = clWindowText
       Font.Height = -16
       Font.Name = 'MS Sans Serif'

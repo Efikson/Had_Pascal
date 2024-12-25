@@ -1,6 +1,6 @@
 object Form2: TForm2
-  Left = 1465
-  Top = 135
+  Left = 1462
+  Top = 121
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'Track races'
@@ -13,14 +13,16 @@ object Form2: TForm2
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
     Left = 32
     Top = 8
-    Width = 100
+    Width = 117
     Height = 20
-    Caption = 'Tlou'#353#357'ka '#269#225'ry'
+    Caption = 'Track thickness'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -16
@@ -31,9 +33,9 @@ object Form2: TForm2
   object Label2: TLabel
     Left = 40
     Top = 72
-    Width = 101
+    Width = 91
     Height = 20
-    Caption = 'Rychlost '#269#225'ry'
+    Caption = 'Track speed'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -16
@@ -48,7 +50,7 @@ object Form2: TForm2
     Height = 24
     Align = alBottom
     Alignment = taRightJustify
-    Caption = 'Autor - Filip Efler   '
+    Caption = 'Created by Filip Efler   '
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -20
@@ -57,11 +59,11 @@ object Form2: TForm2
     ParentFont = False
   end
   object Label4: TLabel
-    Left = 16
+    Left = 40
     Top = 136
-    Width = 147
+    Width = 91
     Height = 20
-    Caption = 'Po'#269'et vyhran'#253'ch kol'
+    Caption = 'Rounds won'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -16
@@ -101,7 +103,7 @@ object Form2: TForm2
     Width = 99
     Height = 41
     Caption = 'START'
-    Font.Charset = DEFAULT_CHARSET
+    Font.Charset = BALTIC_CHARSET
     Font.Color = clWindowText
     Font.Height = -20
     Font.Name = 'MS Sans Serif'
@@ -115,8 +117,8 @@ object Form2: TForm2
     Top = 144
     Width = 99
     Height = 41
-    Caption = 'KONEC'
-    Font.Charset = DEFAULT_CHARSET
+    Caption = 'EXIT'
+    Font.Charset = BALTIC_CHARSET
     Font.Color = clWindowText
     Font.Height = -20
     Font.Name = 'MS Sans Serif'
@@ -182,9 +184,10 @@ object Form2: TForm2
     Font.Height = -13
     Font.Name = 'MS Sans Serif'
     Font.Style = []
+    MaxLength = 13
     ParentFont = False
     TabOrder = 6
-    Text = 'Hr'#225#269' 1'
+    Text = 'Player 1'
     OnChange = Edit3Change
   end
   object Edit4: TEdit
@@ -197,9 +200,10 @@ object Form2: TForm2
     Font.Height = -13
     Font.Name = 'MS Sans Serif'
     Font.Style = []
+    MaxLength = 13
     ParentFont = False
     TabOrder = 7
-    Text = 'Hr'#225#269' 2'
+    Text = 'Player 2'
     OnChange = Edit4Change
   end
   object Edit5: TEdit
