@@ -36,17 +36,18 @@ type
     procedure Button2Click(Sender: TObject);
     procedure Timer2Timer(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
-    procedure UpdatePlayer(var X, Y: integer; var angle: Real; LControl, RControl: Boolean; color: TColor);
-    procedure InicializujHru;
-    procedure ZastavitHru;
-    procedure Kontroluj (player: Integer);
-    Procedure BodyVitezstvi(player: Integer);
-    procedure ResetHry(player: Integer);
+    procedure DrawPlayer(var X, Y: integer; var angle: Real; LControl, RControl: Boolean; color: TColor);
+    procedure GameStart;
+    procedure GameStop;
+    procedure GameReset(player: Integer);
+    procedure CheckPlayerColision (player: Integer);
+    Procedure AwardPointsCheckVictory(player: Integer);
   public
-    X1, X2, Y1, Y2 : integer; //Pozice hráèù
-    angle1, angle2: Real; //ovládání hráèù
-    L1, R1, L2, R2, vitez : Boolean; //ovládání hráèù
+    X1, X2, Y1, Y2 : integer; //players positions
+    angle1, angle2: Real; //players controls
+    L1, R1, L2, R2, winner : Boolean; //players controls
   end;
 
 var
@@ -58,12 +59,12 @@ uses Unit2;
 {$R *.dfm}
 
 ////////////////////////
-// Vykreslování hráèù //
-procedure TForm1.UpdatePlayer(var X, Y: integer; var angle: Real; LControl, RControl: Boolean; color: TColor);
+// rendering players  //
+procedure TForm1.DrawPlayer(var X, Y: integer; var angle: Real; LControl, RControl: Boolean; color: TColor);
 begin
   Image1.Canvas.MoveTo(X, Y);
-  X := Round(X + RychlostCary * Cos(angle));
-  Y := Round(Y + RychlostCary * Sin(angle));
+  X := Round(X + LineSpeed * Cos(angle));
+  Y := Round(Y + LineSpeed * Sin(angle));
   Image1.Canvas.Pen.Color := color;
   Image1.Canvas.LineTo(X, Y);
 
@@ -75,14 +76,14 @@ end;
 
 procedure TForm1.Timer1Timer(Sender: TObject);
 begin
-  UpdatePlayer(X1, Y1, angle1, L1, R1, clRed);
-  UpdatePlayer(X2, Y2, angle2, L2, R2, clBlue);
-  Kontroluj(1);
-  Kontroluj(2);
+  DrawPlayer(X1, Y1, angle1, L1, R1, clRed);
+  DrawPlayer(X2, Y2, angle2, L2, R2, clBlue);
+  CheckPlayerColision(1);
+  CheckPlayerColision(2);
 end;
 
-////////////////////
-// Ovládání hráèù //
+//////////////////////
+// players controls //
 procedure TForm1.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 const
 BlinkRange = 60;
@@ -95,13 +96,13 @@ begin
       Y1 := Round(Y1 + BlinkRange * Sin(angle1));
       CheckBox1.State := cbUnchecked;
 
-      // Kontrola skoku mimo herní oblast
+      // glitch jump check
       if not PtInRect(image1.BoundsRect, Point(X1, Y1)) then
       begin
-      BodyVitezstvi(1);
-      if vitez then Exit;
-      ResetHry(1);
-      Showmessage(label5.caption + ' chtìl zbabìle utéct');      
+      AwardPointsCheckVictory(1);
+      if winner then Exit;
+      GameReset(1);
+      Showmessage(label5.caption + ' wanted to run away cowardly.');
       end;
     end;
   end;
@@ -114,22 +115,22 @@ begin
       Y2 := Round(Y2 + BlinkRange * Sin(angle2));
       CheckBox2.State := cbUnchecked;
 
-      // Kontrola skoku mimo herní oblast   
+      // glitch jump check
       if not PtInRect(image1.BoundsRect, Point(X1, Y1)) then
       begin
-      BodyVitezstvi(2);
-      if vitez then Exit;
-      ResetHry(2);
-      Showmessage(label6.caption + ' chtìl zbabìle utéct');      
+      AwardPointsCheckVictory(2);
+      if winner then Exit;
+      GameReset(2);
+      Showmessage(label6.caption + ' wanted to run away cowardly');
       end;
     end;
   end;
 
-  // Ovládání pohybu a otáèení
+  // Movement and rotation control
   if Key = 65 then L1 := True;  // A
   if Key = 68 then R1 := True;  // D
-  if Key = 37 then L2 := True;  // šipka vlevo
-  if Key = 39 then R2 := True;  // šipka vpravo
+  if Key = 37 then L2 := True;  // Left arrow
+  if Key = 39 then R2 := True;  // Right arrow
 end;
 
 procedure TForm1.FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -140,9 +141,9 @@ begin
   if Key = 39 then R2 := False;
 end;
 
-//////////////////////
-// Inicializace Hry //
-procedure TForm1.InicializujHru;
+////////////////
+// Game start //
+procedure TForm1.GameStart;
 begin
  button1.Enabled:=false;
  timer2.Enabled:=true;
@@ -156,20 +157,20 @@ begin
  label3.left:=trunc(image1.Width/2)-30;
  label3.Font.size:=80;
 
- //vykreslení rámeèku
+ //green border
  Image1.canvas.pen.color:=clgreen;
  Image1.canvas.pen.width:=15;
  image1.Canvas.Rectangle(0,0,image1.Width,image1.Height);
  
- //reset ovládání
-  Image1.Canvas.Pen.Width:= TloutkaCary;
+ //controls reset
+  Image1.Canvas.Pen.Width:= LineThickness;
   L1:= False;
   R1:= False;
   L2:= False;
   R2:= False; 
 end;
 
-procedure TForm1.ZastavitHru;
+procedure TForm1.GameStop;
 begin
   button1.Enabled := False;
   button2.Enabled := True;
@@ -177,34 +178,39 @@ begin
   timer2.Enabled := False;
 end;
 
-// Spuštìní prvního kola
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+Self.Position := poScreenCenter;
+end;
+
+// start of the first round
 procedure TForm1.FormShow(Sender: TObject);
 begin
  edit1.Text:= '0';
  edit2.Text:= '0';
- label5.Caption:=hrac1;
- label6.Caption:=hrac2;
- label8.Caption:= 'Limit vyhraných kol = ' + INTTOSTR(PocetKol);
- vitez := false;
-
- InicializujHru;  
+ label5.Caption:=player1;
+ label6.Caption:=player2;
+ label8.Caption:= 'Race to ' + INTTOSTR(Rounds);
+ winner := false;
+       
+ GameStart;  
 end;
 
-// Zastavení a pøípadný reset hry po kolizi
-procedure TForm1.ResetHry(player: Integer);
+// stop and reset after collision
+procedure TForm1.GameReset(player: Integer);
 begin
-  ZastavitHru;
+  GameStop;
   button1.Enabled := True;
   label3.Visible := True;
   label3.Top := Trunc(image1.Height / 2) - 20;
   label3.Left := Trunc(image1.Width / 2) - 160;
   label3.Font.Size := 20;
-  label3.Caption := 'Pro nové kolo stiskni ENTER';
+  label3.Caption := 'Press ENTER for a new round.';
 end;
 
 procedure TForm1.Timer2Timer(Sender: TObject);
 begin
-  //náhodný vektor hráèù pøi startu
+  //random vector of players at start
   label3.Caption:= INTTOSTR(STRTOINT(label3.Caption) -1);
   if label3.Caption=INTTOSTR(0) THEN
   begin
@@ -215,7 +221,7 @@ begin
   Y2:= Image1.Height div 2;
 
   randomize;
-  angle1:= random (7); //úhly v radiánech
+  angle1:= random (7); //angles in radians
   angle2:= random (7);
 
   timer1.enabled:= true;
@@ -223,7 +229,7 @@ begin
   button2.enabled:=false;
   end;
 
-  //spawn tlaèítka bonusu
+  //bonus button spawn
   label4.Caption:= INTTOSTR(STRTOINT(label4.Caption) - 1);
   IF label4.Caption =INTTOSTR(0) THEN
   begin
@@ -236,7 +242,7 @@ end;
 
 procedure TForm1.Button1Click(Sender: TObject);
 begin
- InicializujHru;
+ GameStart;
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);
@@ -245,38 +251,36 @@ form1.hide;
 form2.Show;
 end;
 
-// Pøiètení bodù a kontrola vítìzství
-Procedure Tform1.BodyVitezstvi(player: Integer);
+// adding points and checking victory
+Procedure Tform1.AwardPointsCheckVictory(player: Integer);
 begin
-  // Pøiètení bodu hráèi
   case player of
     1: edit2.Text := INTTOSTR(STRTOINT(edit2.Text) + 1);
     2: edit1.Text := INTTOSTR(STRTOINT(edit1.Text) + 1);
   end;
 
-  // Kontrola vítìzství
-  if (StrToInt(edit1.Text) = PocetKol) then
+  if (StrToInt(edit1.Text) = Rounds) then
   begin
-    vitez := true;
-    ZastavitHru;
-    ShowMessage(label5.Caption + ' zvítìzil!');
+    winner := true;
+    GameStop;
+    ShowMessage(label5.Caption + ' is the winner!');
   end
-  else if (StrToInt(edit2.Text) = PocetKol) then
+  else if (StrToInt(edit2.Text) = Rounds) then
   begin
-    vitez := true;
-    ZastavitHru;
-    ShowMessage(label6.Caption + ' zvítìzil!');
+    winner := true;
+    GameStop;
+    ShowMessage(label6.Caption + ' is the winner!');
   end;
 end;
 
-/////////////////////
-// Kontrola kolizí //
-procedure TForm1.Kontroluj(player: Integer);
+///////////////////////
+// collision control //
+procedure TForm1.CheckPlayerColision(player: Integer);
 var
   mess: Integer;
   bod1: TPoint;
   playerX, playerY, playerAngle: real;
-  playerName: string;
+  playerJmeno: string;
   playerCheckBox: TCheckBox;
 begin  
   case player of
@@ -284,57 +288,56 @@ begin
       playerX := X1;
       playerY := Y1;
       playerAngle := angle1;
-      playerName := hrac1;
+      playerJmeno := player1;
       playerCheckBox := CheckBox1;
     end;
     2: begin
       playerX := X2;
       playerY := Y2;
       playerAngle := angle2;
-      playerName := hrac2;
+      playerJmeno := player2;
       playerCheckBox := CheckBox2;
     end;
   end;
 
-  // Kolize pro hráèe
-  bod1.X := Round(playerX + (TloutkaCary * 3 / 4) * Cos(playerAngle));
-  bod1.Y := Round(playerY + (TloutkaCary * 3 / 4) * Sin(playerAngle));
+  bod1.X := Round(playerX + (LineThickness * 3 / 4) * Cos(playerAngle));
+  bod1.Y := Round(playerY + (LineThickness * 3 / 4) * Sin(playerAngle));
 
-  // Kontrola kolize
+  // collision check
   case image1.Canvas.Pixels[bod1.X, bod1.Y] of
     clRed: begin
-      BodyVitezstvi(player);
-      if vitez then Exit;
-      ResetHry(player);
+      AwardPointsCheckVictory(player);
+      if winner then Exit;
+      GameReset(player);
       mess := Random(2);
       case mess of
-        0: ShowMessage(playerName + ' ochutnal sám sebe');
-        1: ShowMessage(playerName + ' narazil do èervené dráhy');
+        0: ShowMessage(playerJmeno + ' got tricked.');
+        1: ShowMessage(playerJmeno + ' hit the red thin line.');
       end; 
     end;
     clBlue: begin
-      BodyVitezstvi(player);
-      if vitez then Exit;
-      ResetHry(player);
+      AwardPointsCheckVictory(player);
+      if winner then Exit;
+      GameReset(player);
       mess := Random(2);
       case mess of
-        0: ShowMessage(playerName + ' se nechal napálit');
-        1: ShowMessage(playerName + ' narazil do modré dráhy'); 
+        0: ShowMessage(playerJmeno + ' got fooled.');
+        1: ShowMessage(playerJmeno + ' hit the blue track.');
       end;
     end;
     clGreen: begin
-      BodyVitezstvi(player);
-      if vitez then Exit;
-      ResetHry(player);
+      AwardPointsCheckVictory(player);
+      if winner then Exit;
+      GameReset(player);
       mess := Random(2);
       case mess of
-        0: ShowMessage(playerName + ' chtìl vyjet do windowsù');
-        1: ShowMessage(playerName + ' narazil do zelené dráhy');
+        0: ShowMessage(playerJmeno + ' wanted to go to windows.');
+        1: ShowMessage(playerJmeno + ' hit the green border.');
       end;
     end;
   end; 
 
-  // Kontrola kolize s tlaèítkem bonusu
+  // Collision check with bonus button
   if PtInRect(Button3.BoundsRect, bod1) then
   begin
     Button3.Visible := False;
