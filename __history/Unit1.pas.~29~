@@ -47,7 +47,7 @@ type
     procedure CheckPlayerCollision (player: Integer);
     procedure HandleCollision(player: Integer);
     Procedure AwardPoints(player: Integer);
-    Procedure CheckVictory;
+    Procedure CheckVictory(player: Integer);
   public
     X1, X2, Y1, Y2 : integer; //players positions
     angle1, angle2: Real; //players controls
@@ -124,7 +124,7 @@ procedure TForm1.ProcessJump(player: Integer; var X, Y: Integer; angle: Double; 
 const
   JumpRange = 60;
 begin
-  if CheckBox.State = cbChecked then
+  if CheckBox.State = cbUnChecked then
   begin
     X := Round(X + JumpRange * Cos(angle));
     Y := Round(Y + JumpRange * Sin(angle));
@@ -134,7 +134,6 @@ begin
     if not PtInRect(image1.BoundsRect, Point(X, Y)) then
     begin
       HandleCollision(Player);
-      if winner then Exit;
       ShowMessage(PlayerLabel.Caption + ' wanted to run away cowardly.');
     end;
   end;
@@ -153,7 +152,6 @@ begin
  label5.Caption:=player1;
  label6.Caption:=player2;
  label8.Caption:= 'Race to ' + INTTOSTR(Rounds);
- winner := false;
 
  GameStart;
 end;
@@ -167,6 +165,7 @@ begin
  checkbox1.State:=cbunchecked;
  checkbox2.State:=cbunchecked;
  label4.Caption:=INTTOSTR(5);
+ winner := false;
  
  label3.Visible:=true;
  label3.Caption:=INTTOSTR(3);
@@ -258,7 +257,7 @@ begin
   end;
 end;
 
-Procedure Tform1.CheckVictory;
+Procedure Tform1.CheckVictory(player: Integer);
 begin
   if (StrToInt(edit1.Text) = Rounds) then
   begin
@@ -274,7 +273,6 @@ begin
   end;
 end;
 
-
 ///////////////////////
 // collision control //
 procedure TForm1.CheckPlayerCollision(player: Integer);
@@ -284,7 +282,6 @@ var
   playerX, playerY, playerAngle: real;
   playerName: string;
   playerCheckBox: TCheckBox;
-
 begin
   case player of
     1: begin
@@ -347,8 +344,7 @@ end;
  procedure TForm1.HandleCollision(player: Integer);
 begin
   AwardPoints(player);
-  CheckVictory;
-  if winner then Exit;
+  CheckVictory(player);
   GameReset;
 end;
 

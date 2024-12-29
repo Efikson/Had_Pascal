@@ -134,7 +134,6 @@ begin
     if not PtInRect(image1.BoundsRect, Point(X, Y)) then
     begin
       HandleCollision(Player);
-      if winner then Exit;
       ShowMessage(PlayerLabel.Caption + ' wanted to run away cowardly.');
     end;
   end;
